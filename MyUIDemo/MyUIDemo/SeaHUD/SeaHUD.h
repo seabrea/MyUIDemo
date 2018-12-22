@@ -13,22 +13,35 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SeaHUD : NSObject
 
 /**
- 中心弹框
+ 原生风格中心弹框
  
  @param titleStr       标题内容
  @param contentStr     弹框内容
  @param confirmHandler 确定按钮事件
  */
-+ (void)alertTitle:(NSString *)titleStr Content:(NSString *)contentStr Confirm:(void(^)(void))confirmHandler;
++ (void)systemAlertTitle:(NSString *)titleStr Content:(NSString *)contentStr Confirm:(void(^)(void))confirmHandler;
 
 /**
- 底部弹框
+ 原生风格底部弹框
  
  @param list       弹框内容
  @param closeTitle 关闭按钮标题，如此传nil则不显示关闭按钮
  @param handler    内容选择事件
  */
-+ (void)popActionSheetList:(NSArray<NSString *> *)list CloseTitle:(NSString * _Nullable)closeTitle SelectAction:(void(^)(NSUInteger selectIndex))handler;
++ (void)systemPopActionSheetList:(NSArray<NSString *> *)list CloseTitle:(NSString * _Nullable)closeTitle SelectAction:(void(^)(NSUInteger selectIndex))handler;
+
+/**
+ 原生风格Loading
+ */
++ (void)showLoding;
++ (void)dismissLoading;
+
+/**
+ 原生风格Toast
+ 
+ @param msg 消息内容
+ */
++ (void)showToast:(NSString *)msg;
 
 @end
 
