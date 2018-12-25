@@ -39,8 +39,10 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  原生风格Toast
  
- @param msg 消息内容
+ @param msg  消息内容
+ @param time 间隔时间
  */
++ (void)showToast:(NSString *)msg Interval:(NSTimeInterval)time;
 + (void)showToast:(NSString *)msg;
 
 @end

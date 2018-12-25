@@ -47,10 +47,10 @@
         [SeaHUD showToast:@"这是提示消息这是提示消息这是提示消息这是提示消息这是提示消息这是提示消息这是提示消息这是提示消息这是提示消息这是提示消息这是提示消息这是提示消息这是提示消息这是提示消息这是提示消息"];
     }
     else if(sender.tag == 10004) {
-        
+        [SeaHUD showToast:@"这是提示 Interval:5" Interval:5];
     }
     else if(sender.tag == 10005) {
-        
+        [SeaHUD showToast:@"这是提示 Interval:1" Interval:1];
     }
 }
 

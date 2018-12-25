@@ -10,7 +10,8 @@
 
 @interface SeaHUD()
 
-@property (nonatomic, strong) UIView *toastView;
+@property (strong, nonatomic) UIView *toastView;
+@property (strong, nonatomic) UIView *loadingView;
 
 @end
 
@@ -26,13 +27,29 @@
 
 + (void)showLoding {
     
+    SeaHUD *hud = [SeaHUD shareInstance];
+    [[hud curKeyViewController].view addSubview:hud.loadingView];
+    
+    UIActivityIndicatorView *indicatorView = [[SeaHUD shareInstance].loadingView viewWithTag:10001];
+    [indicatorView startAnimating];
 }
 
 + (void)dismissLoading {
     
+    SeaHUD *hud = [SeaHUD shareInstance];
+    
+    UIActivityIndicatorView *indicatorView = [hud.loadingView viewWithTag:10001];
+    [indicatorView stopAnimating];
+    
+    [hud.loadingView removeFromSuperview];
 }
 
 + (void)showToast:(NSString *)msg {
+    
+    [SeaHUD showToast:msg Interval:2];
+}
+
++ (void)showToast:(NSString *)msg Interval:(NSTimeInterval)time {
     
     SeaHUD *hud = [SeaHUD shareInstance];
     [[hud curKeyWindow] addSubview:hud.toastView];
@@ -45,6 +62,9 @@
     CGSize textRect = CGSizeMake(viewWidth - 30, MAXFLOAT);
     CGFloat textHeight = [msg boundingRectWithSize: textRect options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:attributes context:nil].size.height;
     msgLabel.bounds = CGRectMake(0, 0, viewWidth, textHeight + 50);
+    UIVisualEffectView *efv = [msgLabel viewWithTag:10001];
+    efv.frame = msgLabel.bounds;
+    
     
     CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
     opacityAnimation.fromValue = [NSNumber numberWithFloat:0.1];
@@ -57,6 +77,22 @@
     scaleAnimation.toValue = [NSNumber numberWithFloat:1.0];
     scaleAnimation.duration = 0.2f;
     [msgLabel.layer addAnimation:scaleAnimation forKey:NSStringFromSelector(_cmd)];
+    
+    __block NSTimeInterval timeInterval = 0;
+    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(0, 0));
+    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
+    dispatch_source_set_event_handler(timer, ^{
+        
+        if(timeInterval >= time) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                dispatch_source_cancel(timer);
+                [hud.toastView removeFromSuperview];
+            });
+        }
+        ++timeInterval;
+    });
+    dispatch_resume(timer);
 }
 
 
@@ -173,6 +209,19 @@ static SeaHUD *instance = nil;
     return currentViewController;
 }
 
+//- (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size {
+//    
+//    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+//    UIGraphicsBeginImageContext(rect.size);
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    CGContextSetFillColorWithColor(context,color.CGColor);
+//    CGContextFillRect(context, rect);
+//    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    
+//    return img;
+//}
+
 
 #pragma mark - Getter
 
@@ -186,7 +235,6 @@ static SeaHUD *instance = nil;
         
         UIButton *bgViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
         bgViewButton.frame = _toastView.bounds;
-        [bgViewButton addTarget:self action:@selector(removeView) forControlEvents:UIControlEventTouchUpInside];
         [_toastView addSubview:bgViewButton];
         
         UILabel *msgLabel = [[UILabel alloc] init];
@@ -199,17 +247,27 @@ static SeaHUD *instance = nil;
         msgLabel.layer.cornerRadius = 10.0;
         msgLabel.layer.masksToBounds = YES;
         [_toastView addSubview:msgLabel];
-        
-        UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-        UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
-        effectView.frame = msgLabel.bounds;
-        [msgLabel addSubview:effectView];
     }
     return _toastView;
 }
 
-- (void)removeView {
-    [self.toastView removeFromSuperview];
+- (UIView *)loadingView {
+    
+    if(!_loadingView) {
+        UIView *keyView = [self curKeyViewController].view;
+        _loadingView = [[UIView alloc] initWithFrame:keyView.bounds];
+        
+        UIView *bgView = [[UIView alloc] initWithFrame:keyView.bounds];
+        bgView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
+        [_loadingView addSubview:bgView];
+        
+        UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        indicatorView.tag = 10001;
+        indicatorView.hidesWhenStopped = YES;
+        indicatorView.center = bgView.center;
+        [bgView addSubview:indicatorView];
+    }
+    return _loadingView;
 }
 
 @end
