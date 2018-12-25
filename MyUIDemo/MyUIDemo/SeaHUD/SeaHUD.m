@@ -29,7 +29,6 @@
     
     SeaHUD *hud = [SeaHUD shareInstance];
     [[hud curKeyViewController].view addSubview:hud.loadingView];
-    
     UIActivityIndicatorView *indicatorView = [[SeaHUD shareInstance].loadingView viewWithTag:10001];
     [indicatorView startAnimating];
 }
@@ -37,15 +36,12 @@
 + (void)dismissLoading {
     
     SeaHUD *hud = [SeaHUD shareInstance];
-    
     UIActivityIndicatorView *indicatorView = [hud.loadingView viewWithTag:10001];
     [indicatorView stopAnimating];
-    
     [hud.loadingView removeFromSuperview];
 }
 
 + (void)showToast:(NSString *)msg {
-    
     [SeaHUD showToast:msg Interval:2];
 }
 
@@ -62,22 +58,8 @@
     CGSize textRect = CGSizeMake(viewWidth - 30, MAXFLOAT);
     CGFloat textHeight = [msg boundingRectWithSize: textRect options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:attributes context:nil].size.height;
     msgLabel.bounds = CGRectMake(0, 0, viewWidth, textHeight + 50);
-    UIVisualEffectView *efv = [msgLabel viewWithTag:10001];
-    efv.frame = msgLabel.bounds;
     
-    
-    CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    opacityAnimation.fromValue = [NSNumber numberWithFloat:0.1];
-    opacityAnimation.toValue = [NSNumber numberWithFloat:1.0];
-    opacityAnimation.duration = 0.2f;
-    [hud.toastView.layer addAnimation:opacityAnimation forKey:NSStringFromSelector(_cmd)];
-    
-    CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-    scaleAnimation.fromValue = [NSNumber numberWithFloat:1.2];
-    scaleAnimation.toValue = [NSNumber numberWithFloat:1.0];
-    scaleAnimation.duration = 0.2f;
-    [msgLabel.layer addAnimation:scaleAnimation forKey:NSStringFromSelector(_cmd)];
-    
+    // 设置计时器
     __block NSTimeInterval timeInterval = 0;
     dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(0, 0));
     dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC, 0 * NSEC_PER_SEC);
@@ -87,12 +69,24 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 dispatch_source_cancel(timer);
-                [hud.toastView removeFromSuperview];
+                [hud removeToastWithAnimation];
             });
         }
         ++timeInterval;
     });
-    dispatch_resume(timer);
+    
+    // 设置弹出动画
+    hud.toastView.alpha = 0.1f;
+    msgLabel.transform = CGAffineTransformMakeScale(1.2, 1.2);
+    
+    [UIView animateWithDuration:0.2f animations:^{
+        
+        hud.toastView.alpha = 1.0f;
+        msgLabel.transform = CGAffineTransformMakeScale(1, 1);
+    } completion:^(BOOL finished) {
+        //动画结束后开始计时器
+        dispatch_resume(timer);
+    }];
 }
 
 
@@ -209,18 +203,17 @@ static SeaHUD *instance = nil;
     return currentViewController;
 }
 
-//- (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size {
-//    
-//    CGRect rect = CGRectMake(0, 0, size.width, size.height);
-//    UIGraphicsBeginImageContext(rect.size);
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//    CGContextSetFillColorWithColor(context,color.CGColor);
-//    CGContextFillRect(context, rect);
-//    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-//    
-//    return img;
-//}
+- (void)removeToastWithAnimation {
+    
+    UILabel *msgLabel = [self.toastView viewWithTag:10000];
+    [UIView animateWithDuration:0.2f animations:^{
+        
+        self.toastView.alpha = 0.1f;
+        msgLabel.transform = CGAffineTransformMakeScale(1.1, 1.1);
+    } completion:^(BOOL finished) {
+        [self.toastView removeFromSuperview];
+    }];
+}
 
 
 #pragma mark - Getter
