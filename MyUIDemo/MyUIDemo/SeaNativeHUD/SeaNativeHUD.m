@@ -1,53 +1,53 @@
 //
-//  SeaHUD.m
+//  SeaNativeHUD.m
 //  MyUIDemo
 //
-//  Created by Bob on 2018/12/21.
+//  Created by Bob on 2018/12/26.
 //  Copyright © 2018年 seabrea. All rights reserved.
 //
 
-#import "SeaHUD.h"
+#import "SeaNativeHUD.h"
 
-@interface SeaHUD()
+@interface SeaNativeHUD()
 
 @property (strong, nonatomic) UIView *toastView;
 @property (strong, nonatomic) UIView *loadingView;
 
 @end
 
-@implementation SeaHUD
+@implementation SeaNativeHUD
 
 + (void)systemAlertTitle:(NSString *)titleStr Content:(NSString *)contentStr Confirm:(void(^)(void))confirmHandler {
-    [[SeaHUD shareInstance] alertTitle:titleStr Content:contentStr CancelTitle:@"取消" CancelAction:nil ConfirmTitle:@"确定" Confirm:confirmHandler];
+    [[SeaNativeHUD shareInstance] alertTitle:titleStr Content:contentStr CancelTitle:@"取消" CancelAction:nil ConfirmTitle:@"确定" Confirm:confirmHandler];
 }
 
 + (void)systemPopActionSheetList:(NSArray<NSString *> *)list CloseTitle:(NSString * _Nullable)closeTitle SelectAction:(void(^)(NSUInteger selectIndex))handler {
-    [[SeaHUD shareInstance] popActionSheetList:list Title:nil Content:nil CloseTitle:closeTitle SelectAction:handler];
+    [[SeaNativeHUD shareInstance] popActionSheetList:list Title:nil Content:nil CloseTitle:closeTitle SelectAction:handler];
 }
 
 + (void)showLoding {
     
-    SeaHUD *hud = [SeaHUD shareInstance];
+    SeaNativeHUD *hud = [SeaNativeHUD shareInstance];
     [[hud curKeyViewController].view addSubview:hud.loadingView];
-    UIActivityIndicatorView *indicatorView = [[SeaHUD shareInstance].loadingView viewWithTag:10001];
+    UIActivityIndicatorView *indicatorView = [hud.loadingView viewWithTag:10001];
     [indicatorView startAnimating];
 }
 
 + (void)dismissLoading {
     
-    SeaHUD *hud = [SeaHUD shareInstance];
+    SeaNativeHUD *hud = [SeaNativeHUD shareInstance];
     UIActivityIndicatorView *indicatorView = [hud.loadingView viewWithTag:10001];
     [indicatorView stopAnimating];
     [hud.loadingView removeFromSuperview];
 }
 
 + (void)showToast:(NSString *)msg {
-    [SeaHUD showToast:msg Interval:2];
+    [SeaNativeHUD showToast:msg Interval:2];
 }
 
 + (void)showToast:(NSString *)msg Interval:(NSTimeInterval)time {
     
-    SeaHUD *hud = [SeaHUD shareInstance];
+    SeaNativeHUD *hud = [SeaNativeHUD shareInstance];
     [[hud curKeyWindow] addSubview:hud.toastView];
     
     UILabel *msgLabel = [hud.toastView viewWithTag:10000];
@@ -92,11 +92,11 @@
 
 #pragma mark - singleton
 
-static SeaHUD *instance = nil;
+static SeaNativeHUD *instance = nil;
 + (instancetype)shareInstance {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        instance = [[SeaHUD alloc] init];
+        instance = [[SeaNativeHUD alloc] init];
     });
     return instance;
 }

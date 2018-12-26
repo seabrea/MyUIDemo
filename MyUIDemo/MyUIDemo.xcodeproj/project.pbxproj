@@ -13,7 +13,7 @@
 		C464FCE221CCC66F00BFD896 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C464FCE121CCC66F00BFD896 /* Assets.xcassets */; };
 		C464FCE521CCC67200BFD896 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C464FCE321CCC67100BFD896 /* LaunchScreen.storyboard */; };
 		C464FCE821CCC67600BFD896 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C464FCE721CCC67600BFD896 /* main.m */; };
-		C464FCF121CCC75100BFD896 /* SeaHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = C464FCF021CCC75100BFD896 /* SeaHUD.m */; };
+		C464FCF421D31EDC00BFD896 /* SeaNativeHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = C464FCF321D31EDC00BFD896 /* SeaNativeHUD.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,8 +27,8 @@
 		C464FCE421CCC67200BFD896 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C464FCE621CCC67400BFD896 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C464FCE721CCC67600BFD896 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		C464FCEF21CCC75100BFD896 /* SeaHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SeaHUD.h; sourceTree = "<group>"; };
-		C464FCF021CCC75100BFD896 /* SeaHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SeaHUD.m; sourceTree = "<group>"; };
+		C464FCF221D31EDC00BFD896 /* SeaNativeHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SeaNativeHUD.h; sourceTree = "<group>"; };
+		C464FCF321D31EDC00BFD896 /* SeaNativeHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SeaNativeHUD.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +61,7 @@
 		C464FCD721CCC51200BFD896 /* MyUIDemo */ = {
 			isa = PBXGroup;
 			children = (
-				C464FCEE21CCC6CF00BFD896 /* SeaHUD */,
+				C464FCEE21CCC6CF00BFD896 /* SeaNativeHUD */,
 				C464FCD821CCC51200BFD896 /* AppDelegate.h */,
 				C464FCD921CCC51200BFD896 /* AppDelegate.m */,
 				C464FCDB21CCC51200BFD896 /* ViewController.h */,
@@ -75,13 +75,13 @@
 			path = MyUIDemo;
 			sourceTree = "<group>";
 		};
-		C464FCEE21CCC6CF00BFD896 /* SeaHUD */ = {
+		C464FCEE21CCC6CF00BFD896 /* SeaNativeHUD */ = {
 			isa = PBXGroup;
 			children = (
-				C464FCEF21CCC75100BFD896 /* SeaHUD.h */,
-				C464FCF021CCC75100BFD896 /* SeaHUD.m */,
+				C464FCF221D31EDC00BFD896 /* SeaNativeHUD.h */,
+				C464FCF321D31EDC00BFD896 /* SeaNativeHUD.m */,
 			);
-			path = SeaHUD;
+			path = SeaNativeHUD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,8 +155,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C464FCDD21CCC51200BFD896 /* ViewController.m in Sources */,
-				C464FCF121CCC75100BFD896 /* SeaHUD.m in Sources */,
 				C464FCE821CCC67600BFD896 /* main.m in Sources */,
+				C464FCF421D31EDC00BFD896 /* SeaNativeHUD.m in Sources */,
 				C464FCDA21CCC51200BFD896 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

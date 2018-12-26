@@ -1,8 +1,8 @@
 //
-//  SeaHUD.h
+//  SeaNativeHUD.h
 //  MyUIDemo
 //
-//  Created by Bob on 2018/12/21.
+//  Created by Bob on 2018/12/26.
 //  Copyright © 2018年 seabrea. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SeaHUD : NSObject
+@interface SeaNativeHUD : NSObject
 
 /**
  原生风格中心弹框
